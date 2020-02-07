@@ -2,6 +2,14 @@
 #include <random>
 #include "TrafficLight.h"
 
+#define RANDOM_MIN 4
+#define RANDOM_MAX 6
+
+int getRandomValue ()
+{
+    rand() % ((RANDOM_MAX - RANDOM_MIN) + 1) + RANDOM_MIN;
+}
+
 /* Implementation of class "MessageQueue" */
 
 /* 
@@ -23,7 +31,6 @@ void MessageQueue<T>::send(T &&msg)
 
 /* Implementation of class "TrafficLight" */
 
-/* 
 TrafficLight::TrafficLight()
 {
     _currentPhase = TrafficLightPhase::red;
@@ -53,6 +60,26 @@ void TrafficLight::cycleThroughPhases()
     // and toggles the current phase of the traffic light between red and green and sends an update method 
     // to the message queue using move semantics. The cycle duration should be a random value between 4 and 6 seconds. 
     // Also, the while-loop should use std::this_thread::sleep_for to wait 1ms between two cycles. 
-}
 
-*/
+    auto lastCycleTime = std::chrono::system_clock::now();
+
+    // get random duration between 4 and 6 seconds
+    int cycleDuration = getRandomValue();
+    while (1)
+    {
+        // for the cpu sake..
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+        // get elapsed time since lastCycleTime
+        int elapsed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - lastCycleTime).count();
+        if (cycleDuration < elapsed)
+        {
+            // update lastCycleTime and random duration
+            cycleDuration = getRandomValue();
+            lastCycleTime = std::chrono::system_clock::now();
+
+            // toggls the current phase
+            _currentPhase = (_currentPhase == TrafficLightPhase::red) ? TrafficLightPhase::green : TrafficLightPhase::red;
+        }
+    }
+}

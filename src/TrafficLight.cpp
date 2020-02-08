@@ -86,6 +86,8 @@ void TrafficLight::cycleThroughPhases()
 
             // toggls the current phase
             _currentPhase = (_currentPhase == TrafficLightPhase::red) ? TrafficLightPhase::green : TrafficLightPhase::red;
+            // send updated traffic phase to queue
+            _msgQueue.send(std::move(_currentPhase));
         }
     }
 }

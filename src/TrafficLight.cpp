@@ -7,7 +7,7 @@
 
 int getRandomValue ()
 {
-    rand() % ((RANDOM_MAX - RANDOM_MIN) + 1) + RANDOM_MIN;
+    return rand() % ((RANDOM_MAX - RANDOM_MIN) + 1) + RANDOM_MIN;
 }
 
 /* Implementation of class "MessageQueue" */
